@@ -18,9 +18,11 @@ class Client:
             print(prompt)
 
             verb = input("Action: ")
-            if(verb == "EXIT" or verb == ''):
+            if verb == "EXIT":
                 conn_socket.close()
                 break
+            elif verb =="":
+                continue
             code = input("Code: ")
             if(verb == "write" or verb == "update"):
                 state = input("State: ")
