@@ -24,7 +24,8 @@ class Server:
            client_socket,addr = self.serversocket.accept()
            print("Got a connection from %s" % str(addr))
            #Start Thread to serve client
-           threading.Thread(target=self.open_connetion, args=(client_socket,addr, )).start()
+           threading.Thread(target=self.open_connetion,
+                            args=(client_socket,addr, )).start()
 
     def show_prompt(self):
         """Prompt Message to inform about the actions

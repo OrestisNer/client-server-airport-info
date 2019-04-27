@@ -16,10 +16,10 @@ class Client:
         conn_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         #connect to server
         conn_socket.connect((self.host, self.port))
+        prompt = conn_socket.recv(self.BUFFER_SIZE).decode('utf-8')
+        print(prompt)
         while(True):
             #receive prompt
-            prompt = conn_socket.recv(self.BUFFER_SIZE).decode('utf-8')
-            print(prompt)
 
             verb = input("Action: ")
             if verb == "EXIT" or verb =="":
@@ -46,13 +46,14 @@ class Client:
             print(f"{str(response)}")
 
 def main():
-    coin = random.randint(1, 3)
-    if(coin==1):
-        print("I am Writer")
-        Client("writer").establish_connection()
-    else:
-        print("I am Reader")
-        Client("reader").establish_connection()
+    Client("writer").establish_connection()
+    #coin = random.randint(1, 3)
+    #if(coin==1):
+        #print("I am Writer")
+        #Client("writer").establish_connection()
+    #else:
+        #print("I am Reader")
+        #Client("reader").establish_connection()
 
 
 if __name__ == "__main__":
