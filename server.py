@@ -41,9 +41,9 @@ class Server:
 
     def open_connetion(self,client_socket,addr):
         """Function to handle communication with client"""
+        client_socket.send(self.show_prompt().encode('utf-8'))
         while(True):
             #send prompth
-            client_socket.send(self.show_prompt().encode('utf-8'))
             #get package as json string
             client_package_json = client_socket.recv(self.BUFFER_SIZE).decode('utf-8')
             if not client_package_json:
@@ -51,10 +51,8 @@ class Server:
                 break
             #handle the client package
             server_response = self.handle_package(client_package_json)
-            #send informative response back to client
+            print(server_response)
             client_socket.send(server_response.encode('utf-8'))
-            #debugging print
-            self.print_routes()
 
         client_socket.close()
 
@@ -90,7 +88,7 @@ class Server:
            unlocked lock."""
         self.action_delay("write")
         self.airport_routes[code] = {"code":code, "state": state,
-                                     "time": time, "lock": threading.Lock()}
+                                     "time": time}
         return """
                 [+]WOK
                 [+]Successfuly add route with code """+code
@@ -102,9 +100,9 @@ class Server:
            Return RERR if route code doesnt exist into dictionary"""
         try:
             route_data = self.airport_routes[code]
-            route_data["lock"].acquire()
+            #route_data["lock"].acquire()
             self.action_delay("read")
-            route_data["lock"].release()
+            #route_data["lock"].release()
             return "[+] ROK "+code+" "+route_data["state"]+" "+route_data["time"]
         except:
             return "RERR"
@@ -116,10 +114,10 @@ class Server:
            thread safe."""
         try:
             route_data = self.airport_routes[code]
-            route_data["lock"].acquire()
+            #route_data["lock"].acquire()
             self.action_delay("delete")
             del self.airport_routes[code]
-            route_data["lock"].release()
+            #route_data["lock"].release()
             return "[+] ROK Route with code "+code+" successfuly deleted"
         except:
             return "RERR"
@@ -130,14 +128,14 @@ class Server:
            acquires the lock so dictionary will be thread safe"""
         try:
             route_data = self.airport_routes[code]
-            route_data["lock"].acquire()
+            #route_data["lock"].acquire()
             self.action_delay("update")
             if state :
                 route_data["state"] = state
 
             if time :
                 route_data["time"] = time
-            route_data["lock"].release()
+            #route_data["lock"].release()
             return "[+] ROK Route with code "+code+" successfuly updated"
         except:
             return "RERR"

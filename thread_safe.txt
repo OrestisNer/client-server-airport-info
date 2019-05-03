@@ -1,0 +1,10 @@
+Η python χρησιμοποιεί τον μηχανισμό GIL (Global Interpeter Lock) μέσω του CPython Interpeter,
+το οποίο εκτελεί έναν Python bytecode τη φορά απλοποιόντας το μοντέλο και καθιστόντας τις δομές ως 
+Thread Safe.(Πηγή: https://docs.python.org/3/glossary.html#term-gil)
+
+
+
+http://effbot.org/pyfaq/what-kinds-of-global-value-mutation-are-thread-safe.htm
+Stackoverflow Comment: https://stackoverflow.com/questions/6953351/thread-safety-in-pythons-dictionary#answer-6955678
+
+
