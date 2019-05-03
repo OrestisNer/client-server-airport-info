@@ -1,10 +1,22 @@
 Η python χρησιμοποιεί τον μηχανισμό GIL (Global Interpeter Lock) μέσω του CPython Interpeter,
-το οποίο εκτελεί έναν Python bytecode τη φορά απλοποιόντας το μοντέλο και καθιστόντας τις δομές ως 
+το οποίο εκτελεί έναν Python bytecode τη φορά απλοποιώντας το μοντέλο και καθιστώντας τις δομές ως
 Thread Safe.(Πηγή: https://docs.python.org/3/glossary.html#term-gil)
 
+Επομένως, μπορούμε να χρησιμοποιήσουμε χωρίς locks ένα shared dictionary καθώς
+πρακτικά κανένας κώδικας δεν θα εκτελεστεί "ταυτόχρονα".
 
+Για την υλοποίηση της άσκησης χρησιμοποίησα locks σε κάθε γραμμή του
+dictionary. Με αυτόν τον τρόπο όταν ένας Writer γράφει σε μία γραμμή
+κλειδώνει μόνο αυτήν και όχι όλη τη δομή.
 
-http://effbot.org/pyfaq/what-kinds-of-global-value-mutation-are-thread-safe.htm
-Stackoverflow Comment: https://stackoverflow.com/questions/6953351/thread-safety-in-pythons-dictionary#answer-6955678
+Στον κώδικα μου έχω κρατήσει τα locks καθώς χαλάει την
+λειτουργικότητα αν τα αφαιρέσω λόγω της διαφοράς στα sleep.
+Για παράδειγμα αν ,για μία εγγραφή με κωδικό 320,
+εκτελέσω από Writer "update 320 onair 15.00" (το οποίο έχει sleep 5s)
+και ταυτόχρονα από Reader εκτελέσω "read 320" (το οποίο έχει sleep 2s)
+τότε το αποτέλεσμα θα φτάσει πιο γρήγορα στον Reader και μη ανανεωμένο.
+Με τη χρήση των Locks ο Reader θα διαβάσει αφού τελειώσει το sleep του
+Writer και κάνει το update.
 
-
+Καταλήγοντας τα lock κατά γραμμή είναι για λόγους προσομοίωσης
+της λειτουργικότητας που ζητάει η άσκηση και όχι για προστασία της δομής.

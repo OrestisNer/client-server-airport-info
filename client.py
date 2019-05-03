@@ -46,14 +46,14 @@ class Client:
             print(f"{str(response)}")
 
 def main():
-    Client("writer").establish_connection()
-    #coin = random.randint(1, 3)
-    #if(coin==1):
-        #print("I am Writer")
-        #Client("writer").establish_connection()
-    #else:
-        #print("I am Reader")
-        #Client("reader").establish_connection()
+    #lient("writer").establish_connection()
+    coin = random.randint(1, 4)
+    if(coin==1):
+        print("Hello Writer")
+        Client("writer").establish_connection()
+    else:
+        print("Hello Reader")
+        Client("reader").establish_connection()
 
 
 if __name__ == "__main__":
