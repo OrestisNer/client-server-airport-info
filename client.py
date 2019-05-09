@@ -2,6 +2,8 @@
 import socket
 import json
 import random
+import threading
+import sys
 
 class Client:
 
@@ -15,12 +17,18 @@ class Client:
         """Function to force connectio between client and server"""
         conn_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         #connect to server
-        conn_socket.connect((self.host, self.port))
+        try:
+            conn_socket.connect((self.host, self.port))
+        except socket.error as e:
+            sys.exit("""
+                    [+] Server is Unavailabe
+                    [+] Exiting ...
+                    """)
+
+        #receive prompt
         prompt = conn_socket.recv(self.BUFFER_SIZE).decode('utf-8')
         print(prompt)
         while(True):
-            #receive prompt
-
             verb = input("Action: ")
             if verb == "EXIT" or verb =="":
                 conn_socket.close()
@@ -45,16 +53,18 @@ class Client:
             response = conn_socket.recv(self.BUFFER_SIZE).decode('utf-8')
             print(f"{str(response)}")
 
-def main():
-    Client("writer").establish_connection()
-    #coin = random.randint(1, 3)
-    #if(coin==1):
-        #print("I am Writer")
-        #Client("writer").establish_connection()
-    #else:
-        #print("I am Reader")
-        #Client("reader").establish_connection()
 
+
+def main():
+    if len(sys.argv) != 2:
+        print("""
+              [+] Run client program with one argument.
+              [+] The argument indicates the client's type
+              [+] e.g python client.py writer
+              [+]     python client.py reader
+              """)
+    elif (sys.argv[1] == 'reader' or sys.argv[1] == 'writer'):
+        Client(sys.argv[1]).establish_connection()
 
 if __name__ == "__main__":
     main()
