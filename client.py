@@ -54,7 +54,6 @@ class Client:
             print(f"{str(response)}")
 
 
-
 def main():
     if len(sys.argv) != 2:
         print("""
